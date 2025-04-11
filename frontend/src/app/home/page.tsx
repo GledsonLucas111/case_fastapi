@@ -1,8 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { CardCourse } from "@/components/cardCourse";
+import FormDialog from "@/components/formDialog";
+import Header from "@/components/header";
+import { Box, Button, Typography } from "@mui/material";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const { push } = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    !!localStorage.getItem("dataUser")
+  );
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      push("/");
+    }
+  }, [isLoggedIn, push]);
+
+  if (!isLoggedIn) {
+    return null;
+  }
 
   function getUserData() {
     const dados = localStorage.getItem("dataUser");
@@ -14,11 +33,25 @@ export default function Home() {
     }
   }
 
-  console.log(getUserData());
   return (
     <div className="">
-      <header className="p-10 bg-blue-900">la</header>
-      {getUserData().role === "teacher"? <h1>Meus cursos</h1>: <h1>Cursos</h1>}
+      <Header user={getUserData()} />
+      {getUserData().role === "teacher" ? (
+        <Box className="flex items-center p-5 gap-10">
+          <Typography variant="subtitle1" className="">
+            Meus cursos:
+          </Typography>
+          <FormDialog id={getUserData().id} />
+        </Box>
+      ) : (
+        <Box className="flex items-center p-5 gap-10">
+          <Typography variant="subtitle1" className="">
+            Cursos matriculados
+          </Typography>
+          <Button className="h-7" variant="contained" onClick={()=> push("/courses")}>Procurar novos cursos</Button>
+        </Box>
+      )}
+      <CardCourse user={getUserData()} />
     </div>
   );
 }

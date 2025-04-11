@@ -60,6 +60,7 @@ class Course(Base):
     
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), nullable=False)
+    video = Column(String(255), nullable=False)
     teacher_id = Column(Integer, ForeignKey("teachers.id"), nullable=False)
     
     teacher = relationship("Teacher", back_populates="courses")

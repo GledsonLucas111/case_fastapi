@@ -55,6 +55,7 @@ UserUpdate=Union[StudentUpdate, TeacherUpdate, UserUpdateBase]
 
 class CourseBase(BaseModel):
     name: str
+    video: str
     teacher_id: int
     
     

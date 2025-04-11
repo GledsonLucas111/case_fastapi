@@ -3,13 +3,14 @@
 import { UserService } from "@/services/userService";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Box, Button, TextField } from "@mui/material";
+import { Alert, Box, Button, TextField } from "@mui/material";
 
 export default function Login() {
   const userService = new UserService();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { push } = useRouter();
+  const [error, setError] = useState(null);
 
   const submit = (e: React.FormEvent) => {
     userService
@@ -18,7 +19,12 @@ export default function Login() {
         localStorage.setItem("dataUser", JSON.stringify(response.data));
         push("/home");
       })
-      .catch((error) => alert(error));
+      .catch((error) => {
+        setError(error.response.data.detail || "Erro");
+        setTimeout(() => {
+          setError(null);
+        }, 5000);
+      });
     e.preventDefault();
   };
 
@@ -29,7 +35,12 @@ export default function Login() {
     };
 
   return (
-    <div className="flex flex-col justify-center items-center h-full gap-5">
+    <div className="flex flex-col justify-center items-center h-full gap-5 pt-5">
+      {error && (
+        <Alert variant="filled" severity="error">
+          {error}
+        </Alert>
+      )}
       <h3 className="text-4xl">Login</h3>
       <Box
         component="form"
@@ -50,15 +61,11 @@ export default function Login() {
           onChange={handleInputChange(setPassword)}
           required
         />
-        <Button variant="contained" type="submit"> Entrar</Button>
-      </Box>
-
-      <p className="font-bold mt-10">
-        Você não possui uma conta?{" "}
-        <Button href={"/signup"} size="small">
-          cadastre-se
+        <Button variant="contained" type="submit">
+          {" "}
+          Entrar
         </Button>
-      </p>
+      </Box>
     </div>
   );
 }

@@ -1,16 +1,18 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException
 from src.database.session import get_session
-from src.models.user import User, Teacher, Student, Admin, Course, Registration
+from src.models.user import User, Teacher, Student, Admin
+from src.models.course import Course
+from src.models.registration import Registration
 from src.schema.user import (
     UserUpdate,
     StudentCreate,
     TeacherCreate,
     AdminCreate,
-    UserBase,
-    CourseBase,
-    RegistrationBase,
     Login,
+    UserResponse
 )
+from src.schema.course import CourseBase
+from src.schema.registration import RegistrationBase
 from sqlalchemy.orm import Session
 from src.database.session import Base, engine
 from fastapi.middleware.cors import CORSMiddleware
@@ -32,27 +34,23 @@ app.add_middleware(
 )
 
 
-@app.get("/users/")
+@app.get("/users/", response_model=list[UserResponse])
 def get_users(db: Session = Depends(get_session)):
     users = db.query(User).all()
-    user_response = []
-    for user in users:
-        user_response.append(
-            {"id": user.id, "name": user.name, "email": user.email, "role": user.role}
-        )
-    return user_response
+
+    return users
 
 
-@app.get("/users/{user_id}")
+@app.get("/users/{user_id}", response_model=UserResponse)
 def get_user(user_id: int, db: Session = Depends(get_session)):
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    return {"id": user.id, "name": user.name, "email": user.email, "role": user.role}
+    return user
 
 
-@app.post("/login/")
+@app.post("/login/", response_model=UserResponse)
 async def login(data: Login, db: Session = Depends(get_session)):
     user = db.query(User).filter(User.email == data.email).first()
 
@@ -62,10 +60,10 @@ async def login(data: Login, db: Session = Depends(get_session)):
     if not user.password == data.password:
         raise HTTPException(status_code=401, detail="email or password incorrect.")
 
-    return {"id": user.id, "name": user.name, "email": user.email, "role": user.role}
+    return user
 
 
-@app.post("/users/")
+@app.post("/users/", response_model=UserResponse)
 def create_user(
     user: StudentCreate | TeacherCreate | AdminCreate,
     db: Session = Depends(get_session),
@@ -114,7 +112,7 @@ def create_user(
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
-        return {"id": new_user.id, "nome": new_user.name, "role": new_user.role}
+        return new_user
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
@@ -170,6 +168,7 @@ def courses(db: Session = Depends(get_session)):
 
     return course
 
+
 @app.get("/course/{id}")
 def course_by_id(id: int, db: Session = Depends(get_session)):
     course = db.query(Course).filter(Course.id == id).all()
@@ -180,7 +179,7 @@ def course_by_id(id: int, db: Session = Depends(get_session)):
     return course
 
 
-@app.get("/courses/{teacher_id}")
+@app.get("/course/teacher/{teacher_id}")
 def course_by_teacher_id(teacher_id: int, db: Session = Depends(get_session)):
     course = db.query(Course).filter(Course.teacher_id == teacher_id).all()
 
@@ -239,12 +238,13 @@ def create_registration(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/registration/{student_id}")
+@app.get("/registration/student/{student_id}")
 def registratio_by_student_id(student_id: int, db: Session = Depends(get_session)):
-    registration = db.query(Registration).filter(student_id == Registration.student_id).all()
-    
+    registration = (
+        db.query(Registration).filter(student_id == Registration.student_id).all()
+    )
+
     if not registration:
         raise HTTPException(status_code=404, detail="registration not found.")
-    
 
     return registration

@@ -55,25 +55,4 @@ class Admin(User):
         "polymorphic_identity": "admin",
     }
 
-class Course(Base):
-    __tablename__ = "courses"
-    
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(100), nullable=False)
-    video = Column(String(255), nullable=False)
-    teacher_id = Column(Integer, ForeignKey("teachers.id"), nullable=False)
-    
-    teacher = relationship("Teacher", back_populates="courses")
-    registrations = relationship("Registration", back_populates="courses") 
-    
-
-class Registration(Base):
-    __tablename__ = "registrations"
-    
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    student_id = Column(Integer, ForeignKey("students.id"), nullable=False)
-    course_id = Column(Integer, ForeignKey("courses.id"), nullable=False)
-
-    student = relationship("Student", back_populates="enrolled_courses")
-    courses = relationship("Course", back_populates="registrations")
 

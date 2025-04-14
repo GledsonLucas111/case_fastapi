@@ -12,9 +12,10 @@ export class CourseService {
     return axiosInstance.get(`/course/${id}`);
   }
   course_by_teacher_id(id: string) {
-    return axiosInstance.get(`/courses/${id}`);
+    return axiosInstance.get(`/course/teacher/${id}`);
   }
   create(body: { name: string; video: string, teacher_id: number }) {
     return axiosInstance.post(`/course`, body);
   }
 }
+S

@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [tool.taskipy.tasks]
-dev = "fastapi dev src/api/application.py"
+dev = "fastapi dev src/main.py"
 prod = "uvicorn src.api.application:app --host 0.0.0.0 --port 8000 --reload"
 
 [build-system]

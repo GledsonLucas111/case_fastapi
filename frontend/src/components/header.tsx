@@ -1,3 +1,4 @@
+import { UserProps } from "@/types/user";
 import {
   AppBar,
   Avatar,
@@ -9,17 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { FC, useState } from "react";
+import { useState } from "react";
 
-type User = {
-    id: number;
-    name: string;
-    email: string;
-    role: string;
-}
-type UserProps = {
-  user: User
-}
 
 export default function Header({ user }: UserProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

@@ -3,6 +3,7 @@
 import { CardCourse } from "@/components/cardCourse";
 import Header from "@/components/header";
 import { UserService } from "@/services/userService";
+import { User } from "@/types/user";
 import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -10,7 +11,7 @@ import { useEffect, useState } from "react";
 export default function Courses() {
   const { push } = useRouter();
   const userService = new UserService();
-  const [dataUser, setDataUser] = useState([]);
+  const [dataUser, setDataUser] = useState<User[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState(
     !!localStorage.getItem("dataUser")
   );
@@ -29,7 +30,6 @@ export default function Courses() {
       })
       .catch((error) => console.log(error));
   }, [isLoggedIn, push]);
-
   if (!isLoggedIn) {
     return null;
   }

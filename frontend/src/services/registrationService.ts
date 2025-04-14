@@ -8,7 +8,7 @@ export class RegistrationService {
   create(body: { student_id: number, course_id: number }) {
     return axiosInstance.post(`/registration`, body);
   }
-  list_by_teacher_id(id: number){
+  list_by_student_id(id: number){
     return axiosInstance.get(`/registration/${id}`)
   }
 }

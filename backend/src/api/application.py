@@ -170,8 +170,17 @@ def courses(db: Session = Depends(get_session)):
 
     return course
 
+@app.get("/course/{id}")
+def course_by_id(id: int, db: Session = Depends(get_session)):
+    course = db.query(Course).filter(Course.id == id).all()
 
-@app.get("/course/{teacher_id}")
+    if not course:
+        raise HTTPException(status_code=404, detail="Course not found.")
+
+    return course
+
+
+@app.get("/courses/{teacher_id}")
 def course_by_teacher_id(teacher_id: int, db: Session = Depends(get_session)):
     course = db.query(Course).filter(Course.teacher_id == teacher_id).all()
 

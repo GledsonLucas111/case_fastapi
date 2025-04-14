@@ -8,8 +8,11 @@ export class CourseService {
   list(){
     return axiosInstance.get('/course')
   }
-  get_course_by_id(id: string) {
+  course_by_id(id: string) {
     return axiosInstance.get(`/course/${id}`);
+  }
+  course_by_teacher_id(id: string) {
+    return axiosInstance.get(`/courses/${id}`);
   }
   create(body: { name: string; video: string, teacher_id: number }) {
     return axiosInstance.post(`/course`, body);

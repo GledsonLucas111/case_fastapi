@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-engine = create_engine("sqlite:///mydb.db", echo=True)
+engine = create_engine("postgresql://postgres:postgres@localhost:5432/fastapi", echo=True)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

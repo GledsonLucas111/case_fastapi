@@ -9,6 +9,6 @@ export class UserService {
     return axiosInstance.get("/users");
   }
   login(body: { email: string; password: string }) {
-    return axiosInstance.post(`/login`, body);
+    return axiosInstance.post(`/users/login`, body);
   }
 }

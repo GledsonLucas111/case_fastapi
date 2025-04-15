@@ -24,7 +24,7 @@ export default function Courses() {
       .list()
       .then((response) => {
         const new_users = response.data.filter(
-          (user: any) => user.role === "teacher"
+          (user: User) => user.role === "teacher"
         );
         setDataUser(new_users);
       })

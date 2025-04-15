@@ -18,4 +18,3 @@ export class CourseService {
     return axiosInstance.post(`/course`, body);
   }
 }
-S

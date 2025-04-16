@@ -24,7 +24,7 @@ def create_registration(registration: RegistrationBase, db: Session):
         db.add(new_registration)
         db.commit()
         db.refresh(new_registration)
-        return {"message": "registration created"}
+        return new_registration
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))

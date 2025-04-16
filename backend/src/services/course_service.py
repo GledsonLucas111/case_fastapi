@@ -48,7 +48,7 @@ def create_course(course: CourseBase, db: Session):
         db.add(new_course)
         db.commit()
         db.refresh(new_course)
-        return {"message": "course created"}
+        return new_course
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))

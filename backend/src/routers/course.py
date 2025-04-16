@@ -3,7 +3,13 @@ from src.database.session import get_session
 from src.schema.course import CourseBase
 from sqlalchemy.orm import Session
 from src.services.course_service import get_courses, course_by_id, course_by_teacher_id, create_course
+
 router = APIRouter(prefix="/course", tags=["course"])
+
+@router.post("/")
+def create_course_endpoint(course: CourseBase, db: Session = Depends(get_session)):
+   
+    return create_course(course, db)
 
 @router.get("/")
 def get_courses_endpoint(db: Session = Depends(get_session)):
@@ -23,7 +29,3 @@ def course_by_teacher_id_endpoint(teacher_id: int, db: Session = Depends(get_ses
     return course_by_teacher_id(teacher_id, db)
 
 
-@router.post("/")
-def create_course_endpoint(course: CourseBase, db: Session = Depends(get_session)):
-   
-    return create_course(course, db)

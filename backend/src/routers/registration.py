@@ -3,6 +3,7 @@ from src.database.session import get_session
 from src.schema.registration import RegistrationBase
 from sqlalchemy.orm import Session
 from src.services.registration_service import create_registration, registratio_by_student_id
+
 router = APIRouter(prefix="/registration", tags=["registration"])
 
 

@@ -38,9 +38,6 @@ async def login(data: Login, db: Session):
 
 
 def create_user(user: StudentCreate | TeacherCreate | AdminCreate, db: Session):
-    if db.query(User).filter(User.email == user.email).first():
-        raise HTTPException(status_code=400, detail="Email already exist.")
-
     if user.role == "teacher":
         if (
             not hasattr(user, "specialization")
